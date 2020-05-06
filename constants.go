@@ -6,6 +6,7 @@ const (
 	itemError itemType = iota
 	itemEOF
 
+	itemFloat
 	itemInteger
 	itemKeyStart
 	itemMultiLineRawString
@@ -43,6 +44,10 @@ func (i item) String() string {
 		return "Raw String"
 	case itemMultiLineRawString:
 		return "Multi-line Raw String"
+	case itemInteger:
+		return "Integer"
+	case itemFloat:
+		return "Float"
 	case itemText:
 		return "Text"
 	case itemPropertyStart:

@@ -96,6 +96,68 @@ func testLexNumbers(t *testing.T, context spec.G, it spec.S) {
 			}))
 		})
 	})
+
+	context("floats", func() {
+		it("lexes key and float decimal", func() {
+			items, err := mockParser(`key = -3.1_4_1_5`)
+			Expect(err).NotTo(HaveOccurred())
+
+			Expect(items).To(Equal([]item{
+				{typ: itemKeyStart},
+				{typ: itemText, val: "key"},
+				{typ: itemFloat, val: `-3.1_4_1_5`},
+				{typ: itemEOF},
+			}))
+		})
+
+		it("lexes key and float exponent", func() {
+			items, err := mockParser(`key = -2E-2_2`)
+			Expect(err).NotTo(HaveOccurred())
+
+			Expect(items).To(Equal([]item{
+				{typ: itemKeyStart},
+				{typ: itemText, val: "key"},
+				{typ: itemFloat, val: `-2E-2_2`},
+				{typ: itemEOF},
+			}))
+		})
+
+		it("lexes key and mixed float", func() {
+			items, err := mockParser(`key = -2_0.6_1_5E-2_2`)
+			Expect(err).NotTo(HaveOccurred())
+
+			Expect(items).To(Equal([]item{
+				{typ: itemKeyStart},
+				{typ: itemText, val: "key"},
+				{typ: itemFloat, val: `-2_0.6_1_5E-2_2`},
+				{typ: itemEOF},
+			}))
+		})
+
+		it("lexes key and float inf", func() {
+			items, err := mockParser(`key = -inf`)
+			Expect(err).NotTo(HaveOccurred())
+
+			Expect(items).To(Equal([]item{
+				{typ: itemKeyStart},
+				{typ: itemText, val: "key"},
+				{typ: itemFloat, val: `-inf`},
+				{typ: itemEOF},
+			}))
+		})
+
+		it("lexes key and float nan", func() {
+			items, err := mockParser(`key = +nan`)
+			Expect(err).NotTo(HaveOccurred())
+
+			Expect(items).To(Equal([]item{
+				{typ: itemKeyStart},
+				{typ: itemText, val: "key"},
+				{typ: itemFloat, val: `+nan`},
+				{typ: itemEOF},
+			}))
+		})
+	})
 }
 
 //strconv.ParseInt("int", 0, 64)

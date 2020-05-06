@@ -197,10 +197,6 @@ func lexValue(l *lexer) stateFn {
 		l.skip()
 		return lexRawString
 	case unicode.IsDigit(r) || r == 'i' || r == 'n' || r == '+' || r == '-':
-		//Ensures that there is only one + or - at begging
-		if r == '+' || r == '-' {
-			l.next()
-		}
 		return lexStartNumber
 	default:
 		panic("lexValue")

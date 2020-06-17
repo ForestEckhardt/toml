@@ -15,6 +15,8 @@ const (
 	itemRawString
 	itemString
 	itemText
+	itemBoolean
+	itemDateTime
 )
 
 const (
@@ -50,6 +52,10 @@ func (i item) String() string {
 		return "Float"
 	case itemText:
 		return "Text"
+	case itemBoolean:
+		return "Boolean"
+	case itemDateTime:
+		return "Date-Time"
 	case itemPropertyStart:
 		return "Property Start"
 	default:

@@ -10,10 +10,11 @@ import (
 
 func TestTOML(t *testing.T) {
 	suite := spec.New("toml", spec.Report(report.Terminal{}))
+	suite("LexBooleans", testLexBooleans)
 	suite("LexComments", testLexComments)
 	suite("LexKeys", testLexKeys)
-	suite("LexStrings", testLexStrings)
 	suite("LexNumbers", testLexNumbers)
+	suite("LexStrings", testLexStrings)
 	suite.Run(t)
 }
 

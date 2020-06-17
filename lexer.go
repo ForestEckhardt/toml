@@ -163,6 +163,7 @@ func lexTOML(l *lexer) stateFn {
 		return lexTOML
 	case r == commentStart:
 		l.skip()
+		l.pushLexStack(lexTOML)
 		return lexComment
 	case r == eof:
 		if l.pos > l.start {
@@ -198,6 +199,8 @@ func lexValue(l *lexer) stateFn {
 		return lexRawString
 	case unicode.IsDigit(r) || r == 'i' || r == 'n' || r == '+' || r == '-':
 		return lexStartNumber
+	case r == 't' || r == 'f':
+		return lexBoolean
 	default:
 		panic("lexValue")
 		// return l.errorf("expected value found %q", r)
@@ -238,6 +241,11 @@ func allowedEscapeCharacter(r rune) bool {
 	}
 }
 
+func isDateTimeCharacter(r rune) bool {
+	//The space is a valid character
+	return strings.ContainsRune(`-:TZ+. `, r)
+}
+
 // Run functions
 func commentAcceptance(r rune) bool {
 	return !isNewline(r) && r != eof
@@ -269,4 +277,8 @@ func octalAcceptance(r rune) bool {
 
 func binaryAcceptance(r rune) bool {
 	return isBinary(r)
+}
+
+func dateTimeAcceptance(r rune) bool {
+	return unicode.IsDigit(r) || isDateTimeCharacter(r)
 }
